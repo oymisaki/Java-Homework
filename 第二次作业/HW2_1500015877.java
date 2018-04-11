@@ -1,5 +1,6 @@
 ////////
 import javafx.scene.transform.Rotate;
+import org.w3c.dom.events.EventException;
 
 import java.util.*;
 import java.io.*;
@@ -13,10 +14,10 @@ public class HW2_1500015877 extends Tetris {
 	public boolean dummyBoard[][];
 	public boolean dummyPiece[][];
 	public int dummy_piece_x, dummy_piece_y;
-	public int best_r = 0; // æœ€ä½³æ—‹è½¬
-	public int best_h = 0; // æœ€ä½³æ°´å¹³ä½ç§»
-	public int best_j = -1; // æœ€ä½³æ°´å¹³ä½ç§»æ–¹å‘
-	public  boolean bestBoard[][]; // bestBoardå¼•ç”¨
+	public int best_r = 0; // ×î¼ÑĞı×ª
+	public int best_h = 0; // ×î¼ÑË®Æ½Î»ÒÆ
+	public int best_j = -1; // ×î¼ÑË®Æ½Î»ÒÆ·½Ïò
+	public  boolean bestBoard[][]; // bestBoardÒıÓÃ
 
 	public class state{
 		public boolean board[][];
@@ -38,13 +39,14 @@ public class HW2_1500015877 extends Tetris {
 		dummy_piece_y = s.y;
 	}
 
-	/*public HW2_1500015877(){
+	public HW2_1500015877(){
 		super();
-		this.dummyBoard = this.getBoard();
-		this.dummyPiece = this.getPiece();
-		this.dummy_piece_x = this.getPieceX();
-		this.dummy_piece_y = this.getPieceY();
-	}*/
+		bestBoard = new boolean[h][w];
+		dummyBoard = new boolean[h][w];
+		dummyPiece = new boolean[4][4];
+		dummy_piece_x = 0;
+		dummy_piece_y = 0;
+	}
 
 	public boolean[][] getDummyBoard(){
 		boolean tmp[][] = new boolean[h][w];
@@ -128,6 +130,15 @@ public class HW2_1500015877 extends Tetris {
 		return deployable;
 	}
 
+	private int boardPatchScore(boolean[][] b){
+		int count = 0;
+		for(int i=0; i<h; ++i){
+			for(int j=0; j<w-1; ++j) {
+				if(b[i][j] && b[i][j+1]) count++;
+			}
+		}
+		return count;
+	}
 	private boolean isBetter(boolean[][] b1, boolean[][] b2){
         for(int i=0; i<h; ++i){
             int count1 = 0;
@@ -139,62 +150,61 @@ public class HW2_1500015877 extends Tetris {
 
             if(count1 == count2) continue;
 
-            return count1 > count2; // è‡ªåº•è€Œä¸Šåªè¦æœ€åº•é¢çš„æŸä¸€è¡Œçš„å¡«æ»¡çš„æ ¼å­æ›´å¤šï¼Œåˆ™æ›´å¥½
+            return count1 > count2; // ×Ôµ×¶øÉÏÖ»Òª×îµ×ÃæµÄÄ³Ò»ĞĞµÄÌîÂúµÄ¸ñ×Ó¸ü¶à£¬Ôò¸üºÃ
         }
 
         return false;
 	}
 
-	private void findBestPath(){
-		reset(new state(getBoard(), getPiece(), getPieceX(), getPieceY())); // è·å–æœ€æ–°çš„dummyä¿¡æ¯
+	public void findBestPath(){
+		reset(new state(getBoard(), getPiece(), getPieceX(), getPieceY())); // »ñÈ¡×îĞÂµÄdummyĞÅÏ¢
 
 		for(int i=0; i<4; ++i){
-			dummyMovePiece(PieceOperator.Rotate); // æ—‹è½¬
+			dummyMovePiece(PieceOperator.Rotate); // Ğı×ª
 			state s1 = new state(getDummyBoard(), getDummyPiece(), dummy_piece_x, dummy_piece_y);
-			// è®°å½•å½“å‰çŠ¶æ€
+			// ¼ÇÂ¼µ±Ç°×´Ì¬
 			for(int j=-1; j<2; ++j){
 				int h = 0;
 				while(j==-1 || dummyMovePiece(PieceOperator.values()[j])){
 					state s2 = new state(getDummyBoard(), getDummyPiece(), dummy_piece_x, dummy_piece_y);
-					// è®°å½•å½“å‰çŠ¶æ€
+					// ¼ÇÂ¼µ±Ç°×´Ì¬
 
-					if(j != -1) h++; // è®°å½•æ°´å¹³ä½ç§»çš„æ¬¡æ•°ï¼Œç”¨j==-1è¡¨ç¤ºæ²¡æœ‰æ°´å¹³ä½ç§»
+					if(j != -1) h++; // ¼ÇÂ¼Ë®Æ½Î»ÒÆµÄ´ÎÊı£¬ÓÃj==-1±íÊ¾Ã»ÓĞË®Æ½Î»ÒÆ
 
-					while(dummyMovePiece(PieceOperator.Drop)); // æŒç»­è½åˆ°åº•
+					while(dummyMovePiece(PieceOperator.Drop)); // ³ÖĞøÂäµ½µ×
 
-					if(j == -1 || isBetter(dummyBoard, bestBoard)){ // ç›´æ¥ä¸‹è½æ—¶ä½œä¸ºæ¯”è¾ƒåŸºå‡†ï¼Œè®¾ç½®ä¸ºåˆå§‹çš„bestboard
+					if((j == -1 && i==0)|| isBetter(dummyBoard, bestBoard)){ // Ö±½ÓÏÂÂäÊ±×÷Îª±È½Ï»ù×¼£¬ÉèÖÃÎª³õÊ¼µÄbestboard
 						bestBoard = getDummyBoard();
-						best_h = h; // æœ€ä½³æ°´å¹³ä½ç§»
-						best_r = i+1; // æœ€ä½³æ—‹è½¬æ¬¡æ•°
-						best_j = j; // æœ€ä½³æ°´å¹³ä½ç§»æ–¹å‘
+						best_h = h; // ×î¼ÑË®Æ½Î»ÒÆ
+						best_r = i+1; // ×î¼ÑĞı×ª´ÎÊı
+						best_j = j; // ×î¼ÑË®Æ½Î»ÒÆ·½Ïò
 					}
 
-					reset(s2); // é‡ç½®ä»¥ä¾¿å¾ªç¯ä½¿ç”¨
-					if(j == -1) break; // j==-1è¡¨ç¤ºæ²¡æœ‰æ°´å¹³ä½ç§»ï¼Œä¸éœ€è¦å¾ªç¯
+					reset(s2); // ÖØÖÃÒÔ±ãÑ­»·Ê¹ÓÃ
+					if(j == -1) break; // j==-1±íÊ¾Ã»ÓĞË®Æ½Î»ÒÆ£¬²»ĞèÒªÑ­»·
 				}
 			}
 
-			reset(s1); // é‡ç½®ä»¥ä¾¿å¾ªç¯ä½¿ç”¨
+			reset(s1); // ÖØÖÃÒÔ±ãÑ­»·Ê¹ÓÃ
 		}
 	}
 
 	// ####
 	public PieceOperator robotPlay() {
-		if(getPieceX() == w/2 && getPieceY() == (h-1)) findBestPath();
-		// å½“æ–°çš„å½¢çŠ¶deployæ—¶å¯»æ‰¾æœ€ä½³æ–¹æ¡ˆ
+		if(getPieceX() == w/2 && getPieceY() == (h-1) && best_r == 0) findBestPath();
+		// µ±ĞÂµÄĞÎ×´deployÊ±Ñ°ÕÒ×î¼Ñ·½°¸
 
-        System.out.format("rotate: [%d]", best_r);
 		if(best_r > 0){
 			best_r--;
 			return PieceOperator.Rotate;
-		} // æ—‹è½¬
+		} // Ğı×ª
 
 		if(best_h > 0){
 			best_h--;
 			return PieceOperator.values()[best_j];
-		} // å¹³ç§»
+		} // Æ½ÒÆ
 
-		return PieceOperator.Drop; // æ—¢ä¸å¹³ç§»ä¹Ÿä¸æ—‹è½¬å°±ç›´æ¥ä¸‹è½
+		return PieceOperator.Drop; // ¼È²»Æ½ÒÆÒ²²»Ğı×ª¾ÍÖ±½ÓÏÂÂä
 	}
 }
 
