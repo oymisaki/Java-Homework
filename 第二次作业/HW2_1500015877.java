@@ -130,30 +130,18 @@ public class HW2_1500015877 extends Tetris {
 		return deployable;
 	}
 
-	private int boardPatchScore(boolean[][] b){
-		int count = 0;
-		for(int i=0; i<h; ++i){
+	private double boardSolidarityScore(boolean[][] b){
+		double count = 0;
+		for(int i=0; i<h-1; ++i){
 			for(int j=0; j<w-1; ++j) {
-				if(b[i][j] && b[i][j+1]) count++;
+				if(b[i][j] && b[i][j+1]) count += (double)(h-i-1)/(h-i);
 			}
 		}
 		return count;
 	}
+
 	private boolean isBetter(boolean[][] b1, boolean[][] b2){
-        for(int i=0; i<h; ++i){
-            int count1 = 0;
-            int count2 = 0;
-            for(int j=0; j<w; ++j){
-                if(b1[i][j]) count1++;
-                if(b2[i][j]) count2++;
-            }
-
-            if(count1 == count2) continue;
-
-            return count1 > count2; // 自底而上只要最底面的某一行的填满的格子更多，则更好
-        }
-
-        return false;
+		return boardSolidarityScore(b1) > boardSolidarityScore(b2);
 	}
 
 	public void findBestPath(){
