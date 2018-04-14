@@ -136,6 +136,7 @@ public class HW2_1500015877 extends Tetris {
 			for(int j=0; j<w-1; ++j) {
 				if(b[i][j] && b[i][j+1]) count += (double)(h-i-1)/(h-i);
 			}
+			if(count == (w-1) * (double)(h-i-1)/(h-i)) count += 100.0;
 		}
 		return count;
 	}
