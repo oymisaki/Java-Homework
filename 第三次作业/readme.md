@@ -1,5 +1,8 @@
 # 编程手记
-+ `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
+**IntelliIJ**
+`file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
+
+**文件流读入和异常处理**
 + 对于文件输入，如果不进行 **异常处理**，编译器会通不过
     ```java
     try{
@@ -18,7 +21,12 @@
     // 什么也不做
     }
     ```
+
+**HanLP**
 + `HanLP.properties` 应当放在工程目录的 `/out/production/projectname` 下
+
+**Weka**
++ `FastVector` 被弃用了，改用 `ArrayList<>` 具体类型视情况而定
 
 ## java中文文件乱码问题
 `FileReader` 等其他中文乱码问题，当用 `FileReader` 读取文件时，因为 `FileReader` 类继承自 `InputStreamReader` 但 **没有实现父类带字符集参数的构造函数**， 因此只能按照系统默认编码。解决方式是用父类代替。
