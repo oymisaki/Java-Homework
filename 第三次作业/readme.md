@@ -4,6 +4,7 @@
 
 **文件流和异常处理**
 + 对于文件输入，如果不进行 **异常处理**，编译器会通不过
+
     ```java
     try{
             datafile = new BufferedReader(new FileReader(filename));
@@ -35,6 +36,7 @@
 
 **随机数**
 + 随机数生成
+
     ```java
     Random random = new Random();
     int rNumber = random.nextInt(start - end);
@@ -50,6 +52,7 @@
 + `Integer.toString()` 将数字转换为字符串
 + `Integer.parseInt()` 和 `Integer.valueOf()`将字符串转换为数字
 + `string.split(regex)` 方法中的参数是一个 **正则表达式**，如果要表示正则表达式中的字符，需要 **转义** 如
+
     ```java
     String filename = tline.split("\\|")[1];
     String filename = tline.split("|")[1];
@@ -59,6 +62,7 @@
 
 **三元运算符**
 + `C = A > B ? A : B` 为真则是A，假则为B
+
     ```java
     String format = last40.get(i) >= 20 ? "0|./1/%d.txt" : "0|./1/0%d.txt";
     String format = pre80.get(i) < 10 ? "0|./1/00%d.txt" : "0|./1/0%d.txt";
@@ -67,7 +71,9 @@
 ## java中文文件乱码问题
 `FileReader` 等其他中文乱码问题，当用 `FileReader` 读取文件时，因为 `FileReader` 类继承自 `InputStreamReader` 但 **没有实现父类带字符集参数的构造函数**， 因此只能按照系统默认编码。解决方式是用父类代替。
 ```java
-    datafile = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "GBK"));
+    datafile = new BufferedReader(
+        new InputStreamReader(
+        new FileInputStream(filename), "GBK"));
 ```
 这里 `FileReader` 读的是 **字符流**，而 `FileInputStream` 是 **字节流**，因此可以在 `InputStreamReader` 父类字符流中指定字符编码。
 
