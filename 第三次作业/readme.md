@@ -1,4 +1,8 @@
 # 编程手记
+
+## About Atom
++ 修改 `File -> Stylesheet` 的 `style.less` 文件来更改 `Markdown-pdf` 的字体
+
 **IntelliIJ**
 + `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
 
