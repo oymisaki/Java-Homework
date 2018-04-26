@@ -1,6 +1,6 @@
 # 编程手记
 **IntelliIJ**
-`file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
++ `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
 
 **文件流和异常处理**
 + 对于文件输入，如果不进行 **异常处理**，编译器会通不过
@@ -55,6 +55,7 @@
     String filename = tline.split("|")[1];
     ```
     两个的匹配结果会不一样
++ `string.replaceAll(regex)` 方法中也是一个正则表达式，会精确匹配，并将匹配的部分全部替换
 
 **三元运算符**
 + `C = A > B ? A : B` 为真则是A，假则为B
