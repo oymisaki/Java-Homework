@@ -5,7 +5,8 @@
 
 **IntelliIJ**
 + `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
-
++ `file->Project Structure` 选择 `Dependencies` 添加 `library` 可以把 `API` 所在的目录全部导入
+ 
 **文件流和异常处理**
 + 对于文件输入，如果不进行 **异常处理**，编译器会通不过
 
