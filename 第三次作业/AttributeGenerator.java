@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
@@ -27,8 +24,7 @@ public class AttributeGenerator {
 
         String[] words = wordStr.split(",");
         String[] alphas = alphabet.split(",");
-        for(String str: words)
-            wordSet.add(str);
+        wordSet.addAll(Arrays.asList(words));
         for(int i=0;i<words.length;++i)
             Alphabet.put(words[i], alphas[i]);
     }
@@ -36,7 +32,7 @@ public class AttributeGenerator {
         int size;
         int chapter;
         HashMap<String, Integer> wordMap;
-        public Attribute(){
+        private Attribute(){
             size = 0;
             chapter = 0;
             wordMap = new HashMap<>();
@@ -46,7 +42,7 @@ public class AttributeGenerator {
     }
     private ArrayList<Attribute> attrList = new ArrayList<>();
 
-    public AttributeGenerator(String filename){
+    public AttributeGenerator(String filename) throws Exception{
         BufferedReader datafile = null;
         try{
             datafile = new BufferedReader(new FileReader(filename));
@@ -57,18 +53,23 @@ public class AttributeGenerator {
             }
         } catch (FileNotFoundException ex){
             System.err.println("文件不存在：" + filename);
-        } catch (Exception ex){
         }
     }
 
-    public void genAttribute(){
+    public void genAttribute(boolean train){
         BufferedReader datafile = null;
         try {
             for (String tline : trainingFileSet) {
-                String[] splits = tline.split("\\|");
-                String filename = splits[1];
-                int chapter = Integer.parseInt(splits[0]);
-                System.out.println(filename);
+                String filename; int chapter;
+                if(train) {
+                    String[] splits = tline.split("\\|");
+                    filename = splits[1];
+                    chapter = Integer.parseInt(splits[0]);
+                }
+                else{
+                    filename = tline;
+                    chapter = 0;
+                }
                 datafile = new BufferedReader(
                                 new InputStreamReader(
                                 new FileInputStream(filename), "GBK"));
@@ -114,7 +115,7 @@ public class AttributeGenerator {
             out.println("@attribute size real");
             for(String str: wordStr.split(","))
                 out.println(String.format("@attribute %s real", Alphabet.get(str)));
-            out.println("@attribute chapter {0, 1}");
+            out.println("@attribute chapter {0, 1, 2}");
             out.println("@data");
             for(Attribute attr : attrList){
                 String str = Integer.toString(attr.size) + ",";

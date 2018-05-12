@@ -5,8 +5,8 @@
 
 **IntelliIJ**
 + `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
-+ `file->Project Structure` 选择 `Dependencies` 添加 `library` 可以把 `API` 所在的目录全部导入
- 
++ **命令行参数设置** 在 `run->Edit Configuration` 里面添加命令行参数，多个参数间用空格隔开
+
 **文件流和异常处理**
 + 对于文件输入，如果不进行 **异常处理**，编译器会通不过
 
@@ -51,7 +51,10 @@
 **ArrayList**
 + `ArrayList` 的 `get()` 方法只能获取，不能修改，修改要用 `set()` 方法
 + `ArrayList` 的初始化的整形参数指定了 **Capacity** 而不是 **Size** 因此还是需要使用 `add` 方法而不是 `set` 方法
-
++ `collection` 的 `allAll()` 方法不能直接作用于 `Stringp[]` ，但可以利用 `Arrays.asList()` 达成。
+    ```java
+    wordSet.addAll(Arrays.asList(words));
+    ```
 **字符串**
 + `String.format()` 可以用来格式化生成字符串
 + `Integer.toString()` 将数字转换为字符串
@@ -72,6 +75,8 @@
     String format = last40.get(i) >= 20 ? "0|./1/%d.txt" : "0|./1/0%d.txt";
     String format = pre80.get(i) < 10 ? "0|./1/00%d.txt" : "0|./1/0%d.txt";
     ```
+**参数重载**
+java **不支持** 参数重载
 
 ## java中文文件乱码问题
 `FileReader` 等其他中文乱码问题，当用 `FileReader` 读取文件时，因为 `FileReader` 类继承自 `InputStreamReader` 但 **没有实现父类带字符集参数的构造函数**， 因此只能按照系统默认编码。解决方式是用父类代替。
