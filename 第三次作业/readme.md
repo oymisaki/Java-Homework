@@ -5,6 +5,7 @@
 
 **IntelliIJ**
 + `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `jar` 包
++ `file->Project Structure` 选择 `Dependencies` 添加项目要导入的 `lib` 库
 + **命令行参数设置** 在 `run->Edit Configuration` 里面添加命令行参数，多个参数间用空格隔开
 
 **文件流和异常处理**
